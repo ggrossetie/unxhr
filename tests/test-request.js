@@ -44,7 +44,7 @@ const XMLHttpRequest = require('../lib/XMLHttpRequest').XMLHttpRequest
       it(`should get image ${asyncReq ? 'asynchronously' : 'synchronously'}`, async () => {
         const child = childProcess.fork(serverScriptPath, serverArgs)
         try {
-          let arrayBuffer = ''
+          let response
           await new Promise((resolve) => {
             child.on('message', async message => {
               if (message && message.port) {
@@ -54,7 +54,7 @@ const XMLHttpRequest = require('../lib/XMLHttpRequest').XMLHttpRequest
                 xhr.onload = function () {
                   if (xhr.readyState === 4) {
                     if (xhr.status === 200) {
-                      arrayBuffer = new Uint8Array(xhr.response)
+                      response = xhr.response
                     }
                     resolve()
                   }
@@ -63,7 +63,8 @@ const XMLHttpRequest = require('../lib/XMLHttpRequest').XMLHttpRequest
               }
             })
           })
-          expect(fs.readFileSync(ospath.join(__dirname, 'cat.png')).compare(arrayBuffer)).to.equal(0)
+          expect(response instanceof ArrayBuffer).to.equal(true)
+          expect(fs.readFileSync(ospath.join(__dirname, 'cat.png')).compare(new Uint8Array(response))).to.equal(0)
         } finally {
           child.kill()
         }
