@@ -132,6 +132,7 @@ describe('XMLHttpRequest rejectUnauthorized', () => {
       const child = childProcess.fork(serverScriptPath, serverArgs)
       try {
         let responseText = ''
+        let errorText = ''
         await new Promise((resolve, reject) => {
           child.on('message', async message => {
             if (message && message.port) {
@@ -146,14 +147,15 @@ describe('XMLHttpRequest rejectUnauthorized', () => {
                 }
               }
               xhr.onerror = function () {
-                responseText = xhr.statusText
+                errorText = xhr.responseText
                 resolve()
               }
               await xhr.send('ping! "from client"')
             }
           })
         })
-        expect(responseText).to.equal('{"code":"CERT_HAS_EXPIRED"}')
+        expect(responseText).to.equal('')
+        expect(errorText).to.equal('{"code":"CERT_HAS_EXPIRED"}')
       } finally {
         child.kill()
       }
