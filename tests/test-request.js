@@ -9,6 +9,14 @@ chai.use(dirtyChai)
 const expect = chai.expect
 const XMLHttpRequest = require('../lib/XMLHttpRequest').XMLHttpRequest
 
+function setRejectUnauthorized (ssl) {
+  if (ssl) {
+    process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
+  } else {
+    delete process.env.NODE_TLS_REJECT_UNAUTHORIZED
+  }
+}
+
 ;[true, false].forEach((ssl) => {
   const protocol = ssl ? 'https' : 'http'
   const serverArgs = ssl ? ['--ssl'] : []
@@ -16,6 +24,7 @@ const XMLHttpRequest = require('../lib/XMLHttpRequest').XMLHttpRequest
     describe(`XMLHttpRequest ${asyncReq ? 'asynchronous' : 'synchronous'} request over ${protocol}`, () => {
       const serverScriptPath = ospath.join(__dirname, 'server.js')
       it(`should get resource ${asyncReq ? 'asynchronously' : 'synchronously'}`, async () => {
+        setRejectUnauthorized(ssl)
         const child = childProcess.fork(serverScriptPath, serverArgs)
         try {
           let data = ''
@@ -23,7 +32,7 @@ const XMLHttpRequest = require('../lib/XMLHttpRequest').XMLHttpRequest
             child.on('message', message => {
               if (message && message.port) {
                 const xhr = new XMLHttpRequest()
-                xhr.open('GET', `${protocol}://localhost:${message.port}`, asyncReq, null, null, false)
+                xhr.open('GET', `${protocol}://localhost:${message.port}`, asyncReq)
                 xhr.onload = function () {
                   if (xhr.readyState === 4) {
                     if (xhr.status === 200) {
@@ -42,6 +51,7 @@ const XMLHttpRequest = require('../lib/XMLHttpRequest').XMLHttpRequest
         }
       })
       it(`should get image ${asyncReq ? 'asynchronously' : 'synchronously'}`, async () => {
+        setRejectUnauthorized(ssl)
         const child = childProcess.fork(serverScriptPath, serverArgs)
         try {
           let response
@@ -49,7 +59,7 @@ const XMLHttpRequest = require('../lib/XMLHttpRequest').XMLHttpRequest
             child.on('message', async message => {
               if (message && message.port) {
                 const xhr = new XMLHttpRequest()
-                xhr.open('GET', `${protocol}://localhost:${message.port}/cat.png`, asyncReq, null, null, false)
+                xhr.open('GET', `${protocol}://localhost:${message.port}/cat.png`, asyncReq)
                 xhr.responseType = 'arraybuffer'
                 xhr.onload = function () {
                   if (xhr.readyState === 4) {
@@ -70,6 +80,7 @@ const XMLHttpRequest = require('../lib/XMLHttpRequest').XMLHttpRequest
         }
       })
       it(`should post data ${asyncReq ? 'asynchronously' : 'synchronously'}`, async () => {
+        setRejectUnauthorized(ssl)
         const child = childProcess.fork(serverScriptPath, serverArgs)
         try {
           let responseText = ''
@@ -77,7 +88,7 @@ const XMLHttpRequest = require('../lib/XMLHttpRequest').XMLHttpRequest
             child.on('message', async message => {
               if (message && message.port) {
                 const xhr = new XMLHttpRequest()
-                xhr.open('POST', `${protocol}://localhost:${message.port}/echo`, asyncReq, null, null, false)
+                xhr.open('POST', `${protocol}://localhost:${message.port}/echo`, asyncReq)
                 xhr.onload = function () {
                   if (xhr.readyState === 4) {
                     if (xhr.status === 200) {
@@ -96,6 +107,7 @@ const XMLHttpRequest = require('../lib/XMLHttpRequest').XMLHttpRequest
         }
       })
       it(`should post json data ${asyncReq ? 'asynchronously' : 'synchronously'} (with correct content-length)`, async () => {
+        setRejectUnauthorized(ssl)
         const child = childProcess.fork(serverScriptPath, serverArgs)
         try {
           let responseText = ''
@@ -103,7 +115,7 @@ const XMLHttpRequest = require('../lib/XMLHttpRequest').XMLHttpRequest
             child.on('message', async message => {
               if (message && message.port) {
                 const xhr = new XMLHttpRequest()
-                xhr.open('POST', `${protocol}://localhost:${message.port}/length`, asyncReq, null, null, false)
+                xhr.open('POST', `${protocol}://localhost:${message.port}/length`, asyncReq)
                 xhr.onload = function () {
                   if (xhr.readyState === 4) {
                     if (xhr.status === 200) {
@@ -130,6 +142,7 @@ describe('XMLHttpRequest rejectUnauthorized', () => {
   const serverArgs = ['--ssl']
   ;[true, false].forEach((asyncReq) => {
     it(`XMLHttpRequest rejectUnauthorized true, ${asyncReq ? 'async' : 'sync'}`, async () => {
+      setRejectUnauthorized(false)
       const child = childProcess.fork(serverScriptPath, serverArgs)
       try {
         let responseText = ''
