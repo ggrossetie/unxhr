@@ -1,10 +1,10 @@
-const chai = require('chai')
-const dirtyChai = require('dirty-chai')
-chai.use(dirtyChai)
-const expect = chai.expect
-const http = require('http')
-const getPort = require('get-port')
-const XMLHttpRequest = require('../lib/XMLHttpRequest').XMLHttpRequest
+'use strict'
+
+import http from 'http'
+import getPort from 'get-port'
+
+import { expect } from './harness.js'
+import { XMLHttpRequest } from '../lib/index.js'
 
 describe('XMLHttpRequest events', () => {
   it('should return the value defined in the specification', async () => {

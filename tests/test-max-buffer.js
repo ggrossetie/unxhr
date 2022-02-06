@@ -1,10 +1,11 @@
-const ospath = require('path')
-const childProcess = require('child_process')
-const chai = require('chai')
-const dirtyChai = require('dirty-chai')
-chai.use(dirtyChai)
-const expect = chai.expect
-const XMLHttpRequest = require('../lib/XMLHttpRequest').XMLHttpRequest
+import ospath from 'path'
+import childProcess from 'child_process'
+import { fileURLToPath } from 'url'
+
+import { expect } from './harness.js'
+import { XMLHttpRequest } from '../lib/index.js'
+
+const __dirname = ospath.dirname(fileURLToPath(import.meta.url))
 
 describe('XMLHttpRequest synchronous request over http', () => {
   const serverScriptPath = ospath.join(__dirname, 'server.js')

@@ -1,10 +1,11 @@
-const chai = require('chai')
-const dirtyChai = require('dirty-chai')
-const os = require('os')
-chai.use(dirtyChai)
-const expect = chai.expect
+'use strict'
+
+import os from 'os'
+
+import { expect } from './harness.js'
+import { XMLHttpRequest } from '../lib/index.js'
+
 const osplatform = os.platform()
-const XMLHttpRequest = require('../lib/XMLHttpRequest').XMLHttpRequest
 const xhr = new XMLHttpRequest()
 
 describe('XMLHttpRequest exceptions', () => {

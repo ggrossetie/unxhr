@@ -1,9 +1,12 @@
-const ospath = require('path')
-const chai = require('chai')
-const dirtyChai = require('dirty-chai')
-chai.use(dirtyChai)
-const expect = chai.expect
-const XMLHttpRequest = require('../lib/XMLHttpRequest').XMLHttpRequest
+'use strict'
+
+import ospath from 'path'
+import { fileURLToPath } from 'url'
+
+import { expect } from './harness.js'
+import { XMLHttpRequest } from '../lib/index.js'
+
+const __dirname = ospath.dirname(fileURLToPath(import.meta.url))
 
 describe('XMLHttpRequest protocols', () => {
   const url = `file://${ospath.join(__dirname, 'text.txt')}`
