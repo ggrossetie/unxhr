@@ -1,13 +1,14 @@
 'use strict'
 
-const ospath = require('path')
-const childProcess = require('child_process')
-const fs = require('fs')
-const chai = require('chai')
-const dirtyChai = require('dirty-chai')
-chai.use(dirtyChai)
-const expect = chai.expect
-const XMLHttpRequest = require('../lib/XMLHttpRequest').XMLHttpRequest
+import ospath from 'path'
+import childProcess from 'child_process'
+import fs from 'fs'
+import { fileURLToPath } from 'url'
+
+import { expect } from './harness.js'
+import { XMLHttpRequest } from '../lib/index.js'
+
+const __dirname = ospath.dirname(fileURLToPath(import.meta.url))
 
 function setRejectUnauthorized (ssl) {
   if (ssl) {
@@ -171,7 +172,7 @@ describe('XMLHttpRequest unauthorized request', () => {
             xhr.open('POST', `https://localhost:${message.port}/echo`, true)
             xhr.onload = function () {
               if (xhr.readyState === 4) {
-                resolve({ })
+                resolve({})
               }
             }
             xhr.onerror = function (e) {

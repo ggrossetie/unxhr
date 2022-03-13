@@ -1,7 +1,9 @@
-const chai = require('chai')
-const expect = chai.expect
+'use strict'
 
-const XMLHttpRequest = require('../lib/XMLHttpRequest').XMLHttpRequest
+import { expect } from './harness.js'
+
+import { XMLHttpRequest } from '../lib/index.js'
+
 const xhr = new XMLHttpRequest()
 
 describe('XMLHttpRequest constants', () => {

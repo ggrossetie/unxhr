@@ -1,8 +1,11 @@
-const getPort = require('get-port')
-const http = require('http')
-const https = require('https')
-const fs = require('fs')
-const ospath = require('path')
+import getPort from 'get-port'
+import http from 'http'
+import https from 'https'
+import fs from 'fs'
+import ospath from 'path'
+import { fileURLToPath } from 'url'
+
+const __dirname = ospath.dirname(fileURLToPath(import.meta.url))
 
 ;(async () => {
   const options = {
