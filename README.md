@@ -4,10 +4,14 @@
 [![install size](https://packagephobia.now.sh/badge?p=unxhr)](https://packagephobia.now.sh/result?p=unxhr)
 [![npm version](https://img.shields.io/npm/v/unxhr)](https://www.npmjs.com/package/unxhr)
 
+> [!WARNING]
+> **This package is no longer maintained.**
+
 _unxhr_ is a tiny wrapper of the built-in `http` client to emulate the browser `XMLHttpRequest` object.
 
-**Important:** This library is a fork of [XMLHttpRequest](https://github.com/driverdan/node-XMLHttpRequest).
-It was created to be compliant with [XMLHttpRequest Level 2](http://www.w3.org/TR/XMLHttpRequest2/).
+> [!IMPORTANT]
+> This library is a fork of [XMLHttpRequest](https://github.com/driverdan/node-XMLHttpRequest).
+> It was created to be compliant with [XMLHttpRequest Level 2](http://www.w3.org/TR/XMLHttpRequest2/).
 
 ## Highlights
 
